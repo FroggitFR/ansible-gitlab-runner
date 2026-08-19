@@ -63,18 +63,15 @@
     - ('gitlab-runner-helper-images' in ansible_facts.packages)
     - (gitlab_runner_package_version is undefined or gitlab_runner_package_version is version('17.7.0', '>='))
 
-- name: "(Debian) Install GitLab Runner Helpers"
+# One transaction: gitlab-runner strictly Depends on the matching
+# gitlab-runner-helper-images version, so installing them separately is
+# unsatisfiable in either order. The helper package exists only from 17.7.1
+# onward (#363, #370), hence the conditional list.
+- name: "(Debian) Install GitLab Runner and its helper images"
+  vars:
+    gitlab_runner_helper_supported: "{{ gitlab_runner_package_version is undefined or gitlab_runner_package_version is version('17.7.0', '>=') }}"
   ansible.builtin.apt:
-    name: "{{ gitlab_runner_helper_package }}"
-    state: "{{ gitlab_runner_package_state }}"
-    allow_change_held_packages: true
-    allow_downgrade: true
-  become: true
-  when: gitlab_runner_package_version is undefined or gitlab_runner_package_version is version('17.7.0', '>=')
-
-- name: "(Debian) Install GitLab Runner"
-  ansible.builtin.apt:
-    name: "{{ gitlab_runner_package }}"
+    name: "{{ [gitlab_runner_package] + ([gitlab_runner_helper_package] if gitlab_runner_helper_supported | bool else []) }}"
     state: "{{ gitlab_runner_package_state }}"
     allow_change_held_packages: true
     allow_downgrade: true
