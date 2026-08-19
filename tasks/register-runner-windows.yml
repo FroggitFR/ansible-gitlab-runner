@@ -58,7 +58,7 @@
       --ssh-identity-file '{{ gitlab_runner.ssh_identity_file }}'
       {% endif %}
       {%if gitlab_runner.ssh_disable_strict_host_key_checking is defined %}
-      --ssh-disable-strict-host-key-checking '{{ gitlab_runner.ssh_disable_strict_host_key_checking }}'
+      --ssh-disable-strict-host-key-checking='{{ gitlab_runner.ssh_disable_strict_host_key_checking }}'
       {% endif %}
       {% if gitlab_runner.cache_type is defined %}
       --cache-type '{{ gitlab_runner.cache_type }}'
