@@ -73,7 +73,7 @@
       --docker-disable-cache
       {% endif %}
       {% if gitlab_runner.docker_oom_kill_disable | default(false) %}
-      --docker-oom-kill-disable '{{ gitlab_runner.docker_oom_kill_disable | default("false") }}'
+      --docker-oom-kill-disable='{{ gitlab_runner.docker_oom_kill_disable | default("false") }}'
       {% endif %}
       {% for policy in gitlab_runner.docker_allowed_pull_policies | default([]) %}
       --docker-allowed-pull-policies "{{ policy }}"
@@ -98,7 +98,7 @@
       --ssh-host '{{ gitlab_runner.ssh_host | default("") }}'
       --ssh-port '{{ gitlab_runner.ssh_port | default("") }}'
       --ssh-identity-file '{{ gitlab_runner.ssh_identity_file | default("") }}'
-      --ssh-disable-strict-host-key-checking '{{ gitlab_runner.ssh_disable_strict_host_key_checking | default("false") }}'
+      --ssh-disable-strict-host-key-checking='{{ gitlab_runner.ssh_disable_strict_host_key_checking | default("false") }}'
       {% if gitlab_runner.executor == "virtualbox" and gitlab_runner.virtualbox_base_name %}
           --virtualbox-base-name '{{ gitlab_runner.virtualbox_base_name }}'
           --virtualbox-base-snapshot '{{ gitlab_runner.virtualbox_base_snapshot | default("") }}'
